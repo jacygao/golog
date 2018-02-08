@@ -6,29 +6,29 @@ package golog
 
 import (
 	"fmt"
-    "log"
+	"log"
 	"os"
 )
 
 // Logr Levels
 const (
-    DEBUG = iota
-    TRACE
-    WARN
+	DEBUG = iota
+	TRACE
+	WARN
 	ERROR
 	FATAL
 )
 
 // Logger defines the instance of golog
 type Logger struct {
-    // The level at which this logger will log.  Can only be set on New
-    level             int
-    tag               []Tag
+	// The level at which this logger will log.  Can only be set on New
+	level int
+	tag   []Tag
 }
 
 // Tag stores tag strings in key-value format
 type Tag struct {
-	key string
+	key   string
 	value interface{}
 }
 
@@ -40,11 +40,11 @@ func New(lvl int) *Logger {
 }
 
 func (l *Logger) message(out string, lv int) {
-    if l.level <= lv {
+	if l.level <= lv {
 		if len(l.tag) > 0 {
 			log.Print(out + " " + fmt.Sprintln(l.tag))
 		} else {
-        	log.Print(out)
+			log.Print(out)
 		}
 	}
 }
@@ -53,64 +53,79 @@ func (l *Logger) message(out string, lv int) {
 func (l *Logger) Debug(msg ...interface{}) {
 	l.message("INFO:  "+fmt.Sprint(msg...), DEBUG)
 }
+
 // Debugf prints formatted log messages on Debug or lower log level
 func (l *Logger) Debugf(format string, args ...interface{}) {
-    l.message("INFO:  "+fmt.Sprintf(format, args...), DEBUG)
+	l.message("INFO:  "+fmt.Sprintf(format, args...), DEBUG)
 }
+
 // Debugw prints log message with key value pair on Debug or lower log level
 func (l *Logger) Debugw(msg string, kv ...interface{}) {
 	l.With(kv...).Debug(msg)
 }
+
 // Info prints log messages on Info or lower log level
 func (l *Logger) Info(info ...interface{}) {
 	l.message("INFO:  "+fmt.Sprint(info...), DEBUG)
 }
+
 // Infof prints formatted log messages on Info or lower log level
 func (l *Logger) Infof(format string, info ...interface{}) {
-    l.message("INFO:  "+fmt.Sprintf(format, info...), DEBUG)
+	l.message("INFO:  "+fmt.Sprintf(format, info...), DEBUG)
 }
+
 // Infow prints log message with key value pair on Info or lower log level
 func (l *Logger) Infow(msg string, kv ...interface{}) {
 	l.With(kv...).Info(msg)
 }
+
 // Warn prints log messages on Warn or lower log level
 func (l *Logger) Warn(warn ...interface{}) {
-    l.message("WARN:  "+fmt.Sprint(warn...), WARN)
+	l.message("WARN:  "+fmt.Sprint(warn...), WARN)
 }
+
 // Warnf prints formatted log messages on Warn or lower log level
 func (l *Logger) Warnf(format string, warn ...interface{}) {
-    l.message("WARN:  "+fmt.Sprintf(format, warn...), WARN)
+	l.message("WARN:  "+fmt.Sprintf(format, warn...), WARN)
 }
+
 // Warnw prints log message with key value pair on Warn or lower log level
 func (l *Logger) Warnw(msg string, kv ...interface{}) {
 	l.With(kv...).Warn(msg)
 }
+
 // Warn prints log messages on Error or lower log level
 func (l *Logger) Error(err ...interface{}) {
-    l.message("ERROR: "+fmt.Sprint(err...), ERROR)
+	l.message("ERROR: "+fmt.Sprint(err...), ERROR)
 }
+
 // Errorf prints formatted log messages on Error or lower log level
 func (l *Logger) Errorf(format string, err ...interface{}) {
-    l.message("ERROR: "+fmt.Sprintf(format, err...), ERROR)
+	l.message("ERROR: "+fmt.Sprintf(format, err...), ERROR)
 }
+
 // Errorw prints log message with key value pair on Error or lower log level
 func (l *Logger) Errorw(msg string, kv ...interface{}) {
 	l.With(kv...).Error(msg)
 }
+
 // Fatal prints log messages and then calls os.Exit
 func (l *Logger) Fatal(msg ...interface{}) {
 	l.message(fmt.Sprint(msg...), FATAL)
 	os.Exit(1)
 }
+
 // Fatalf prints formatted log messages and then calls os.Exit
 func (l *Logger) Fatalf(format string, args ...interface{}) {
 	l.message(fmt.Sprintf(format, args...), FATAL)
 	os.Exit(1)
 }
+
 // Fatalw prints log message with key value pair and then calls os.Exit
 func (l *Logger) Fatalw(msg string, kv ...interface{}) {
 	l.With(kv...).Fatal(msg)
 }
+
 // With gets a child logger instance with specific key value fields attached.
 func (l *Logger) With(kvs ...interface{}) *Logger {
 	childLogger := l.clone()
