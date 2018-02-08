@@ -6,7 +6,6 @@ package golog
 
 import (
 	"fmt"
-	"log"
 	"os"
 )
 
@@ -42,9 +41,9 @@ func New(lvl int) *Logger {
 func (l *Logger) message(out string, lv int) {
 	if l.level <= lv {
 		if len(l.tag) > 0 {
-			log.Print(out + " " + fmt.Sprintln(l.tag))
+			fmt.Printf("%s    %v", out, fmt.Sprintln(l.tag))
 		} else {
-			log.Print(out)
+			fmt.Print(out)
 		}
 	}
 }
